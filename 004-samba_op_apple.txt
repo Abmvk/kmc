@@ -1,0 +1,33 @@
+in de [global] sectie toevoegen:
+
+# iOS specific
+server min protocol=SMB2
+client min protocol=SMB3
+vfs objects=catia fruit streams_xattr
+fruit:nfs_aces=no
+ea support=yes
+min protocol=SMB2
+fruit:metadata=stream
+fruit:model=MacSamba
+fruit:veto_appledouble=no
+fruit:posix_rename=yes
+fruit:zero_file_id=yes
+fruit:wipe_intentionally_left_blank_rfork=yes
+fruit:delete_empty_adfiles=yes
+
+Vervolgens kan je de share zelf definiëren als volgt:
+
+[pi400smb]
+
+path=/home/pi
+browseable = yes
+writeable = yes
+read only = no
+force create mode = 0777
+force directory mode = 2777
+valid users = pi @admins
+ea support=yes
+vfs objects=fruit streams_xattr
+
+Hierbij is [pi400smb] de naam waarmee de share zichtbaar wordt op je iPad, path= geeft de folder op je Pi die als share gaat dienen, en achter valid users= staan de namen van de users die je bij de Samba-server hebt aangemeld.
+
