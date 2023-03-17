@@ -7,3 +7,5 @@ Ik zal alle namen van bestanden beginnen met woorden uit de titel van de tekst, 
 
 Als ik stukjes code heb die niet rechtstreeks betrekking hebben op stukjes op accountant.nl, dan zet ik in de naam geen volgnummer. 
 
+Gebruik is vanzelfsprekend voor eigen risico
+
