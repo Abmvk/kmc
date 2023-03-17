@@ -1,9 +1,9 @@
 #include<stdio.h>
 
-Void main()
+void main()
 {
 
-     printf(“Hello World!”);
+     printf("Hello world");
 
      return;
 }
