@@ -1,0 +1,12 @@
+tropisch_checker(Temp) :-
+  Temp >= 30,
+  write('Het is een tropische dag, denk eraan dat je genoeg drinkt!').
+tropisch_checker(Temp) :-
+  Temp < 30,
+  write('Het is geen tropische dag.').
+
+main :-
+  write('Voer de temperatuur in: '),
+  read(Temp),
+  tropisch_checker(Temp).
+

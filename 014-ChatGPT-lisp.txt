@@ -1,0 +1,10 @@
+(defun tropisch-checker (temp)
+  (if (>= temp 30)
+      (format t "Het is een tropische dag, denk eraan dat je genoeg drinkt!")
+      (format t "Het is geen tropische dag.")))
+
+(defun main ()
+  (let ((temperatuur (read-from-minibuffer "Voer de temperatuur in: ")))
+    (tropisch-checker temperatuur)))
+
+(main)
