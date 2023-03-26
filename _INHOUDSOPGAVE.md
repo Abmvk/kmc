@@ -11,3 +11,4 @@
 011 Pointers in C
 012 Computers houden van accountants
 013 Warchalking
+014 is ChatGPT het einde?
