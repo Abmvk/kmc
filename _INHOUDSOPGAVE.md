@@ -12,3 +12,5 @@
 012 Computers houden van accountants
 013 Warchalking
 014 is ChatGPT het einde?
+015 Loops en logica
+
