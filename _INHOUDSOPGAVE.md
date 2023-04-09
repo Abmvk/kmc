@@ -13,4 +13,5 @@
 013 Warchalking
 014 is ChatGPT het einde?
 015 Loops en logica
-016 De gebruiker aan het woord
+016 Rare sprongen
+017 De gebruiker aan het woord
