@@ -29,7 +29,7 @@ int main()
 		exit(1);					// dit is een soort tussentijdse return, maar nu met errorcode 1
 	}
 
-	printf("\n\n\Naam: %s %s\n", voornaam, achternaam);
+	printf("\n\nNaam: %s %s\n", voornaam, achternaam);
 	printf("Geboorte datum %d/%d/%d\n\n", dag, maand, jaar);
 	
 
