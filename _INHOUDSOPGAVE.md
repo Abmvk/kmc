@@ -15,3 +15,4 @@
 015 Loops en logica
 016 Rare sprongen
 017 De gebruiker aan het woord
+018 Het gedoe met strings
