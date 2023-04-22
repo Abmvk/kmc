@@ -16,3 +16,4 @@
 016 Rare sprongen
 017 De gebruiker aan het woord
 018 Het gedoe met strings
+019 Structuur graag
