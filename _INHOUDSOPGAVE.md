@@ -17,3 +17,4 @@
 017 De gebruiker aan het woord
 018 Het gedoe met strings
 019 Structuur graag
+020 Dynamische arrays
