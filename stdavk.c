@@ -5,7 +5,7 @@
 /* input-functie, return is 0 of 1 bij een fout. Argumenten zijn:
 vraag: string die voor de input wordt gezet met printf()
 inputs: de string waar de input uit stdin wordt opgeslagen
-lengte: de maximale lengte van inputs
+lengte: de maximale lengte van inputs, bij voorkeur dus sizeof(inputs) gebruiken
 
 Alle invoer na lengte wordt genegeerd en uit de stdin stream gehaald
 */

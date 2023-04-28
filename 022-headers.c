@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "stdavk.h"
+#include "stdavk.h"				// geen <> maar "" omdat de header file niet bij de standaard .h files staat, maar in de lokale directory
 
 int main()
 {
