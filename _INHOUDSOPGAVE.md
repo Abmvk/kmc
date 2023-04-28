@@ -19,4 +19,4 @@
 019 Structuur graag
 020 Dynamische arrays
 021 Gekkigheid, pure gekkigheid: linked lists
-
+022 Efficiente headers
