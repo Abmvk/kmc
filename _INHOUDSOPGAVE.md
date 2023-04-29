@@ -20,3 +20,4 @@
 020 Dynamische arrays
 021 Gekkigheid, pure gekkigheid: linked lists
 022 Efficiente headers
+023 Data-analyse!
