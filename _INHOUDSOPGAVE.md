@@ -21,3 +21,4 @@
 021 Gekkigheid, pure gekkigheid: linked lists
 022 Efficiente headers
 023 Data-analyse!
+024 Make it
