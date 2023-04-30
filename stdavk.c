@@ -20,3 +20,9 @@ int input(char vraag[], char inputs[], int lengte)
 		while(fgetc(stdin)!=10){}
 return 0;
 }
+
+void cls() 
+{
+    printf("\033[2J"); // Print ANSI escape sequence to clear screen
+    printf("\033[%d;%dH", 0, 0); // Move cursor to top-left corner of screen
+}

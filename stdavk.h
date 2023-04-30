@@ -13,5 +13,6 @@ Alle invoer na lengte wordt genegeerd en uit de stdin stream gehaald
 
 int input(char vraag[], char inputs[], int lengte);
 
+void cls();
 
 #endif // STDAVK_H
