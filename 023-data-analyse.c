@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "stdavk.h"
 
 int main(int argc, char *argv[])
 {
@@ -37,17 +38,13 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	system("clear");
+	cls();
 
-	do
+	while((teken=fgetc(fp))!=EOF)
 	{
-		teken=fgetc(fp);
-		if(teken!=EOF)
-		{
-			printf("%c",teken);
-			if((teken>90 ? teken-32 : teken)==letter) teller++;
-		}
-	} while(!feof(fp));
+		printf("%c",teken);
+		if((teken>90 ? teken-32 : teken)==letter) teller++;
+	}
 	fclose(fp);
 
 	printf("\n----------------\nDe letter %c kwam %d keer voor, hoofdletter-ongevoelig\n\n",argv[2][0], teller);
