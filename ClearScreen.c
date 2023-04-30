@@ -1,4 +1,7 @@
 /* voorstel van ChatGPT ter vervanging van system("clear"). Deze aanpak zou meer platform-onafhankelijk moeten zijn. Nog te testen.
+
+Als het werkt, opnemen in stdavk.h en stdavk.c als cls()
+
 */
 
 
