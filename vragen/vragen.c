@@ -9,35 +9,34 @@
 
 typedef struct Node Node;					// Node wordt de verkorte schrijfwijze van struct Node
 
-typedef union							// Door een union te gebruiken, worden vragen en dingen over elkaar
-{								// in het geheugen gezet. Dat scheelt 256 bytes per node
-	char vraag[256];
-	char ding[256];
-} Data;
-
-enum NodeType							// Een Node van type VRAAG bevat een vraag en heeft twee kinderen
-{								// Een Node van type DING bevat een ding en heeft geen kinderen
-	VRAAG,
-	DING
-};
-
 struct Node
 {
 	Node* ja;						// De pointer naar de kind-node als het antwoord op de vraag ja is
 	Node* nee;						// De pointer naar de kind-node als het antwoord op de vraag nee is
-	enum NodeType type;					// is de node een VRAAG of een DING?
-	Data data;						// data bevat het ding of de vraag, afhankelijk van type
+	enum NodeType
+	{
+		VRAAG,
+		DING
+	}  type;						// is de node een VRAAG of een DING?
+	union
+	{
+		char vraag[256];
+		char ding[256];
+	} data;							// data bevat het ding of de vraag, afhankelijk van type
 };
 
 Node* createNode(enum NodeType type, const char* data);		// Maak een nieuwe node, met type en inhoud, geen kinderen
-Node* init_tree();						// De kennis-tree wordt opgebouwd of van disk gelezen, als die bestaat
+void writeTreeToFile(FILE* bestand, Node* node);		// schrijf een node naar bestand
+Node* readTreeFromFile(FILE* bestand);				// lees een node uit het bestand
 void save_tree(Node* tree);					// Schrijf de kennis-tree naar TREE_FILE
+Node* init_tree();						// De kennis-tree wordt opgebouwd of van disk gelezen, als die bestaat
 bool ja_of_nee();						// Invoer ja of nee, andere input wordt gegefilterd. True bij ja, false bij nee
 
 int main()
 {
 	bool geraden, goed_gegokt;				// geraden wordt true als computer raadt, goed_gegokt als dat goed was
 	char nieuw_ding[256];					// als computer fout gokt, wordt hier het goede ding in opgevraagd
+	int a, b;						// tellers voor het opschonen van antwoorden
 
 	Node* root = init_tree();				// root wordt de start van de tree
 	Node* current;						// current is een pointer om door de tree te navigeren
@@ -80,6 +79,12 @@ int main()
 			printf("\n\nHelaas! Ik heb verloren!\n\n");
 								// de gebruiker kan invoeren welk ding hij in gedachten had en een vraag
 			input("Wat had je in gedachten? ",nieuw_ding, sizeof(nieuw_ding));
+			for(int i = 0; nieuw_ding[i] != '\0'; i++)
+				nieuw_ding[i] = tolower(nieuw_ding[i]);
+			for(a = 0, b = 0; nieuw_ding[a] != '\0'; a++)
+				if(isalpha(nieuw_ding[a]))
+					nieuw_ding[b++] = nieuw_ding[a];
+			nieuw_ding[b] = '\0';
 
 			printf("\nFormuleer nu een vraag waarmee ik %s had kunnen vinden. Zo gesteld, dat een ja tot", nieuw_ding);
 			printf(" %s zou hebben geleid, in plaats van tot (een) %s.\n", nieuw_ding, current->data.ding);
@@ -87,7 +92,15 @@ int main()
 			current->nee = createNode(DING, current->data.ding);
 								// de huidige node wordt een VRAAG, met de vraag van de gebruiker
 			current->type = VRAAG;
-			input("Wat is de vraag, eindigend met een vraagteken!\n",current->data.vraag, sizeof(current->data.vraag));
+			input("Wat is de vraag? ",current->data.vraag, sizeof(current->data.vraag));
+
+			for(a=0, b=0; current->data.vraag[a] != '\0'; a++)
+				if(isalpha(current->data.vraag[a]) || current->data.vraag[a] == ' ')
+					current->data.vraag[b++] = tolower(current->data.vraag[a]);
+			current->data.vraag[b++]='?';
+			current->data.vraag[b]='\0';
+			current->data.vraag[0]=toupper(current->data.vraag[0]);
+
 								// tenslotte wordt de ja-child node het ding dat de gebruiker bedacht
 			current->ja = createNode(DING, nieuw_ding);
 		}
@@ -95,7 +108,7 @@ int main()
 		printf("\nWil je nog eens spelen?\n");		// zolang de gebruiker blijft spelen groeit de kennis-tree
 	} while(ja_of_nee());
 
-//	save_tree(root);					als de speler is uitgespeeld moet de tree nog worden opgeslagen
+	save_tree(root);					// als de speler is uitgespeeld moet de tree nog worden opgeslagen
 
 return 0;
 }
@@ -117,57 +130,75 @@ return node;
 
 Node* init_tree()
 {
-	FILE *bestand;
-	Node* start;
-	Node* child;
-
-	bestand = fopen(TREE_FILE, "r");			// als het bestand TREE_FILE bestaat wordt hier de tree uitgelezen
-	if(bestand != NULL)
-	{
-		cls();
-		printf(TREE_FILE);
-		printf(" bestaat al!\n");			// dat werkt nog niet, nu alleen een waarschuwing dat bestand bestaat
-		fclose(bestand);
-		abort();
-	}
-	else							// als TREE_FILE niet bestaat wordt een eerste ste nodes opgebouwd
-	{
-		start = createNode(VRAAG, "Is het een dier?");
-		child = start;
-
-		start->ja = createNode(VRAAG, "Is het zwart?");
-		start->nee= createNode(VRAAG, "Is het een gebouw?");
-
-		child = start->ja;
-
-		child->ja = createNode(DING, "kraai");
-		child->nee = createNode(DING, "hond");
-
-		child = start->nee;
-
-		child->ja = createNode(DING, "kerktoren");
-		child->nee = createNode(DING, "bakpan");
-	}
-
-return start;							// in beide gevallen is het eindresultaat de pointer naar de start van de tree
-}
-
-void save_tree(Node* tree)					// deze functie moet de tree vanaf het startpunt gaan opslaan. Werkt nog niet
-{
-	FILE *bestand;
-	bestand = fopen(TREE_FILE, "w");
+	FILE *bestand = fopen(TREE_FILE, "r");
+	Node* start = NULL;
 
 	if(bestand != NULL)
 	{
-		printf("de root-vraag:\n%s\n", tree->data.vraag);
+		start = readTreeFromFile(bestand);
 		fclose(bestand);
 	}
 	else
 	{
-		printf(TREE_FILE);
-		printf(" openen is niet gelukt!\n");
-		abort();
+		start = createNode(VRAAG, "Is het een dier?");
+		start->ja = createNode(VRAAG, "Is het zwart?");
+		start->nee= createNode(VRAAG, "Is het een gebouw?");
+
+		Node* child = start->ja;
+		child->ja = createNode(DING, "kraai");
+		child->nee = createNode(DING, "hond");
+
+		child = start->nee;
+		child->ja = createNode(DING, "kerktoren");
+		child->nee = createNode(DING, "bakpan");
 	}
+
+return start;
+}
+
+void writeTreeToFile(FILE* bestand, Node* node)
+{
+	if(node==NULL)
+		return;
+
+	if(node->type == VRAAG)
+		fprintf(bestand, "Q:%s\n", node->data.vraag);
+	else
+		fprintf(bestand, "D:%s\n", node->data.ding);
+
+	writeTreeToFile(bestand, node->ja);
+	writeTreeToFile(bestand, node->nee);
+}
+
+Node*  readTreeFromFile(FILE* bestand)
+{
+	char type;
+	char data[256];
+
+	if(fscanf(bestand, "%c:%255[^\n]\n", &type, data) != 2)
+		return NULL;
+
+	Node* node = createNode((type == 'Q')? VRAAG : DING, data);
+	node->ja = readTreeFromFile(bestand);
+	node->nee = readTreeFromFile(bestand);
+
+return node;
+}
+
+void save_tree(Node* tree)					// deze functie moet de tree vanaf het startpunt gaan opslaan. Werkt nog niet
+{
+	FILE *bestand = fopen(TREE_FILE, "w");
+
+	if(bestand == NULL )
+	{
+		printf("Kon het bestand niet openen voor schrijven!\n");
+		return;
+	}
+
+	writeTreeToFile(bestand, tree);
+
+	fclose(bestand);
+	printf("Boomstructuur succesvol opgeslagen in %s.\n", TREE_FILE);
 }
 
 bool ja_of_nee()
