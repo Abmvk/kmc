@@ -26,11 +26,34 @@ struct Node
 };
 
 Node* createNode(enum NodeType type, const char* data);		// Maak een nieuwe node, met type en inhoud, geen kinderen
+
 void writeTreeToFile(FILE* bestand, Node* node);		// schrijf een node naar bestand
+
 Node* readTreeFromFile(FILE* bestand);				// lees een node uit het bestand
+
 void save_tree(Node* tree);					// Schrijf de kennis-tree naar TREE_FILE
+
 Node* init_tree();						// De kennis-tree wordt opgebouwd of van disk gelezen, als die bestaat
+
 bool ja_of_nee();						// Invoer ja of nee, andere input wordt gegefilterd. True bij ja, false bij nee
+
+//void printTree(Node* node)
+//{
+//	if(node == NULL)
+//	{
+//		printf("de node is NULL\n\n");
+//		return;
+//	}
+//
+//	if(node->type == VRAAG)
+//		printf("VRAAG: %s\n", node->data.vraag);
+//	else
+//		printf("DING: %s\n", node->data.ding);
+//
+//	printTree(node->ja);
+//	printTree(node->nee);
+//}
+
 
 int main()
 {
@@ -40,6 +63,8 @@ int main()
 
 	Node* root = init_tree();				// root wordt de start van de tree
 	Node* current;						// current is een pointer om door de tree te navigeren
+
+//	printTree(root);
 
 	do							// spel wordt herhaald tot uitgespeeld == true
 	{
