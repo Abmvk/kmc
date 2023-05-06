@@ -18,6 +18,8 @@ int input(char vraag[], char inputs[], int lengte)
 		return 1;
 	if(strlen(inputs)+1==lengte)
 		while(fgetc(stdin)!=10){}
+	if(inputs[strlen(inputs)-1] == '\n')
+		inputs[strlen(inputs)-1] = '\0';
 return 0;
 }
 
