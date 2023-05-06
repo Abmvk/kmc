@@ -36,11 +36,6 @@ Node* createNode(enum NodeType type, const char* data)
 return node;
 }
 
-void printNode(Node* node)
-{
-	printf("%s", node->type ? node->dier : node->vraag);
-}
-
 bool ja_of_nee()
 {
 	char antw[255];
