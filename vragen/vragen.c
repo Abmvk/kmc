@@ -3,7 +3,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <json-c/json.h>
 #include "stdavk.h"
+
 
 #define TREE_FILE "vragen_tree.JSON"					// vragen_tree wordt gebruikt om de kennis-tree op te slaan
 
@@ -27,7 +29,11 @@ struct Node
 
 Node* createNode(enum NodeType type, const char* data);		// Maak een nieuwe node, met type en inhoud, geen kinderen
 
+void writeNodeToJson(json_object *parent, Node *node);
+
 void writeTreeToFile(FILE* bestand, Node* node);		// schrijf een node naar bestand
+
+Node* parseJSONNode(struct json_object* jsonNode);
 
 Node* readTreeFromFile(FILE* bestand);				// lees een node uit het bestand
 
@@ -135,6 +141,38 @@ Node* createNode(enum NodeType type, const char* gegevens)
 return node;
 }
 
+void writeNodeToJson(json_object *parent, Node *node)
+{
+	json_object *nodeObject = json_object_new_object();
+
+	if(node->type == VRAAG)
+	{
+		json_object_object_add(nodeObject, "type", json_object_new_string("VRAAG"));
+		json_object_object_add(nodeObject, "vraag", json_object_new_string(node->data.vraag));
+
+		if(node->ja != NULL)
+		{
+			json_object *jaObject = json_object_new_object();
+			writeNodeToJson(jaObject, node->ja);
+			json_object_object_add(nodeObject, "ja", jaObject);
+		}
+
+		if(node->nee != NULL)
+		{
+			json_object *neeObject = json_object_new_object();
+			writeNodeToJson(neeObject, node->nee);
+			json_object_object_add(nodeObject, "nee", neeObject);
+		}
+	}
+	else if(node->type == DING)
+	{
+		json_object_object_add(nodeObject, "type", json_object_new_string("DING"));
+		json_object_object_add(nodeObject, "ding", json_object_new_string(node->data.ding));
+	}
+
+	json_object_object_add(parent, "node", nodeObject);
+}
+
 Node* init_tree()
 {
 	FILE *bestand = fopen(TREE_FILE, "r");
@@ -165,12 +203,104 @@ return start;
 
 void writeTreeToFile(FILE* bestand, Node* node)
 {
-	// functie om recursief alle nodes vanaf opgegeven node naar bestand te schrijven
+	json_object *rootObject = json_object_new_object();
+	writeNodeToJson(rootObject, node);
+
+	const char *jsonString = json_object_to_json_string_ext(rootObject, JSON_C_TO_STRING_PRETTY);
+	fprintf(bestand, "%s", jsonString);
+
+	json_object_put(rootObject);
 }
 
-Node*  readTreeFromFile(FILE* bestand)
+Node* readTreeFromFile(FILE* bestand)
 {
-	// functie om gehele tree te lezen uit bestand, resultaat is root-node
+	fseek(bestand, 0, SEEK_END);
+	long fileSize = ftell(bestand);
+	rewind(bestand);
+
+	char* buffer = malloc(fileSize+1);
+	if(buffer == NULL)
+	{
+		printf("Fout bij alloceren van geheugen!\n");
+		return NULL;
+	}
+
+	if(fread(buffer, 1, fileSize, bestand) != fileSize)
+	{
+		printf("Fout bij het lezen van het bestand!\n");
+		free(buffer);
+		return NULL;
+	}
+
+	buffer[fileSize] = '\0';
+
+	struct json_object* jsonObject = json_tokener_parse(buffer);
+	if(jsonObject == NULL)
+	{
+		printf("Fout bij het parsen van JSON!\n");
+		free(buffer);
+		return NULL;
+	}
+
+	Node* rootNode = parseJSONNode(jsonObject);
+
+	json_object_put(jsonObject);
+	free(buffer);
+
+return rootNode;
+}
+
+Node* parseJSONNode(struct json_object* jsonNode)
+{
+	Node* node = malloc(sizeof(Node));
+	node->ja = NULL;
+	node->nee = NULL;
+
+	struct json_object* typeObject;
+	if(json_object_object_get_ex(jsonNode, "type", &typeObject))
+	{
+		const char* typeString = json_object_get_string(typeObject);
+		if(strcmp(typeString, "VRAAG") == 0)
+		{
+			node->type = VRAAG;
+
+			struct json_object* questionObject;
+			if(json_object_object_get_ex(jsonNode, "vraag", &questionObject))
+			{
+				const char* questionString = json_object_get_string(questionObject);
+				strncpy(node->data.vraag, questionString, sizeof(node->data.vraag));
+			}
+		}
+		else if(strcmp(typeString, "DING") == 0)
+		{
+			node->type = DING;
+
+			struct json_object* thingObject;
+			if(json_object_object_get_ex(jsonNode, "ding", &thingObject))
+			{
+				const char* thingString = json_object_get_string(thingObject);
+				strncpy(node->data.ding, thingString, sizeof(node->data.ding));
+			}
+		}
+	}
+
+	struct json_object* jaObject;
+	if(json_object_object_get_ex(jsonNode, "ja", &jaObject))
+	{
+		if(json_object_get_type(jaObject) == json_type_object)
+		{
+			node->ja = parseJSONNode(jaObject);
+		}
+	}
+
+	struct json_object* neeObject;
+	if(json_object_object_get_ex(jsonNode, "nee", &neeObject))
+	{
+		if(json_object_get_type(neeObject) == json_type_object)
+		{
+			node->nee = parseJSONNode(neeObject);
+		}
+	}
 
 return node;
 }
