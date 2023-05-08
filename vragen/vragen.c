@@ -6,7 +6,6 @@
 #include <json-c/json.h>
 #include "stdavk.h"
 
-
 #define TREE_FILE "vragen_tree.JSON"					// vragen_tree wordt gebruikt om de kennis-tree op te slaan
 
 typedef struct Node Node;					// Node wordt de verkorte schrijfwijze van struct Node
@@ -218,7 +217,7 @@ Node* readTreeFromFile(FILE* bestand)
 	long fileSize = ftell(bestand);
 	rewind(bestand);
 
-	char* buffer = malloc(fileSize+1);
+	char* buffer = (char *)malloc(fileSize+1);
 	if(buffer == NULL)
 	{
 		printf("Fout bij alloceren van geheugen!\n");
@@ -305,7 +304,7 @@ Node* parseJSONNode(struct json_object* jsonNode)
 return node;
 }
 
-void save_tree(Node* tree)					// deze functie moet de tree vanaf het startpunt gaan opslaan. Werkt nog niet
+void save_tree(Node* tree)
 {
 	FILE *bestand = fopen(TREE_FILE, "w");
 
