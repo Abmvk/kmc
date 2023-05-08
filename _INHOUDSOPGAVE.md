@@ -23,4 +23,6 @@
 023 Data-analyse!
 024 Make it
 025 BSN-nummers controleren
+026 Onze eigen AI
+027 Werken met JSON
 
