@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include "stdavk.h"
 
-#define TREE_FILE "vragen_tree"					// vragen_tree wordt gebruikt om de kennis-tree op te slaan
+#define TREE_FILE "vragen_tree.JSON"					// vragen_tree wordt gebruikt om de kennis-tree op te slaan
 
 typedef struct Node Node;					// Node wordt de verkorte schrijfwijze van struct Node
 
@@ -37,22 +37,6 @@ Node* init_tree();						// De kennis-tree wordt opgebouwd of van disk gelezen, a
 
 bool ja_of_nee();						// Invoer ja of nee, andere input wordt gegefilterd. True bij ja, false bij nee
 
-//void printTree(Node* node)
-//{
-//	if(node == NULL)
-//	{
-//		printf("de node is NULL\n\n");
-//		return;
-//	}
-//
-//	if(node->type == VRAAG)
-//		printf("VRAAG: %s\n", node->data.vraag);
-//	else
-//		printf("DING: %s\n", node->data.ding);
-//
-//	printTree(node->ja);
-//	printTree(node->nee);
-//}
 
 
 int main()
@@ -63,8 +47,6 @@ int main()
 
 	Node* root = init_tree();				// root wordt de start van de tree
 	Node* current;						// current is een pointer om door de tree te navigeren
-
-//	printTree(root);
 
 	do							// spel wordt herhaald tot uitgespeeld == true
 	{
@@ -183,29 +165,12 @@ return start;
 
 void writeTreeToFile(FILE* bestand, Node* node)
 {
-	if(node==NULL)
-		return;
-
-	if(node->type == VRAAG)
-		fprintf(bestand, "Q:%s\n", node->data.vraag);
-	else
-		fprintf(bestand, "D:%s\n", node->data.ding);
-
-	writeTreeToFile(bestand, node->ja);
-	writeTreeToFile(bestand, node->nee);
+	// functie om recursief alle nodes vanaf opgegeven node naar bestand te schrijven
 }
 
 Node*  readTreeFromFile(FILE* bestand)
 {
-	char type;
-	char data[256];
-
-	if(fscanf(bestand, "%c:%255[^\n]\n", &type, data) != 2)
-		return NULL;
-
-	Node* node = createNode((type == 'Q')? VRAAG : DING, data);
-	node->ja = readTreeFromFile(bestand);
-	node->nee = readTreeFromFile(bestand);
+	// functie om gehele tree te lezen uit bestand, resultaat is root-node
 
 return node;
 }
