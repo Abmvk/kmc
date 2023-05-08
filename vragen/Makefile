@@ -1,12 +1,13 @@
 CC=gcc
 CFLAGS=-Wall
+LIBS = -ljson-c
 
 .PHONY: clean
 
 all: $(exe)
 
 $(exe): $(src:.c=.o) stdavk.o
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
