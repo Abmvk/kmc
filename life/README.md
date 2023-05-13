@@ -13,3 +13,7 @@ sudo apt-get install libbsd-dev
 En vanaf daar wordt het vooral experimenteren. Als het een beetje wil werken plaats ik de basisfuncties in stdavk.h / stdavk.c
 
 
+Eerste poging: mislukt. Direct schrijven naar het scherm geeft vooral fouten. Laatste poging op GitHub gezet, voor wie er mee verder proberen.
+
+Mijn volgende poging wordt toepassing van de ncurses.h bibliotheek, waarmee je in de termianl zou moeten kunnen tekenen. Eens zien of ik daar blij van word
+
