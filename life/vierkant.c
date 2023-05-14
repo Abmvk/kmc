@@ -10,12 +10,13 @@
 
 int main(int argc, char **argv)
 {
+	int x, y;
 	initscr();
 	cbreak();
 	noecho();
-
-	mvaddch(10, 10, ACS_BLOCK);
-
+	for(x=0;x<10;x++)
+		for(y=0;y<10;y++)
+			mvaddch(10+x, 10+y, ACS_BLOCK);
 	refresh();
 
 	getch();
