@@ -17,3 +17,7 @@ Eerste poging: mislukt. Direct schrijven naar het scherm geeft vooral fouten. La
 
 Mijn volgende poging wordt toepassing van de ncurses.h bibliotheek, waarmee je in de termianl zou moeten kunnen tekenen. Eens zien of ik daar blij van word
 
+Installeren van de ncurses bibliotheek:
+
+sudo apt install libncurses-dev
+
