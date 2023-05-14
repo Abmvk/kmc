@@ -25,4 +25,5 @@
 025 BSN-nummers controleren
 026 Onze eigen AI
 027 Werken met JSON
+028 Grafieken en gemakzucht
 
