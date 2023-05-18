@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 	noecho();
 	for(int r=0;r<7000;r++)
 	{
-		mvaddch(x, y, ACS_BLOCK);
+		mvaddch(x, y, ' ' | A_REVERSE);
 		refresh();
 		x += dx;
 		y += dy;
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 		for(y=0;y<140;y++)
 			{
 				for(int t=0;t<100000;t++){}
-				mvaddch(x, y, ACS_BLOCK);
+				mvaddch(x, y, ' ' | A_REVERSE);
 				refresh();
 			}
 
