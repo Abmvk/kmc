@@ -26,4 +26,5 @@
 026 Onze eigen AI
 027 Werken met JSON
 028 Grafieken en gemakzucht
-
+029 ncurses
+030 Life
