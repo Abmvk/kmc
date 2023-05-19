@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 	clear();
 	getmaxyx(stdscr, game.maxX, game.maxY);
 	game.maxX--;
-	game.maxY -= 2;
+	game.maxY--;
 
 // veld initialiseren
 	game.veld = malloc((game.maxX+2) * sizeof(bool **));
@@ -84,6 +84,7 @@ int main(int argc, char **argv)
 		tekenVeld(&game);
 		move(0,0);
 		printw("%d", aantal);
+		refresh();
 		if(pauze) ch = getch();
 		if(ch == 'f') pauze = false;
 	} while(--aantal > 0);
@@ -100,7 +101,7 @@ int main(int argc, char **argv)
 // veld vrij geven
 	for(int x = 0; x <= game.maxX; x++)
 	{
-		for(int y = 0; y <= game.maxY+2; y++)
+		for(int y = 0; y <= game.maxY+1; y++)
 		{
 			free(game.veld[x][y]);
 		}
