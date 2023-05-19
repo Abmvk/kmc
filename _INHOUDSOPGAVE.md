@@ -25,6 +25,7 @@
 025 BSN-nummers controleren
 026 Onze eigen AI
 027 Werken met JSON
-028 Grafieken en gemakzucht
-029 ncurses
-030 Life
+028 Debugging
+029 Grafieken en gemakzucht
+030 ncurses
+031 Life
