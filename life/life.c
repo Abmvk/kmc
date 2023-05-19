@@ -16,7 +16,7 @@ struct GameOfLife
 	int maxY;
 };
 
-void cell_draw(int x, int y, bool aan);
+void cell_set(const struct GameOfLife *game, int x, int y, bool aan);
 void tekenVeld(const struct GameOfLife *game);
 void maakVeld(struct GameOfLife *game);
 void berekenNieuweGeneratie(struct GameOfLife *game);
@@ -25,13 +25,20 @@ int main(int argc, char **argv)
 {
 	struct GameOfLife game;
 
+	initscr();
+	cbreak();
+	noecho();
+	keypad(stdscr, TRUE);
+
 	getmaxyx(stdscr, game.maxX, game.maxY);
+	game.maxX--;
+	game.maxY -= 2;
 
 // veld initialiseren
-	game.veld = malloc((game.maxX+1) * sizeof(bool **));
+	game.veld = malloc((game.maxX+2) * sizeof(bool **));
 	for(int x = 0; x <= game.maxX; x++)
 	{
-		game.veld[x] = malloc((game.maxY+1) * sizeof(bool *));
+		game.veld[x] = malloc((game.maxY+2) * sizeof(bool *));
 		for(int y=0; y <= game.maxY; y++)
 		{
 			game.veld[x][y] = malloc(2 * sizeof(bool));
@@ -40,19 +47,14 @@ int main(int argc, char **argv)
 		}
 	}
 
-// scherm initialiseren
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr, TRUE);
 
 
 	maakVeld(&game);
-	tekenVeld(&game);
-	for(int test=0; test<100; test++){
+
+	do{
 	berekenNieuweGeneratie(&game);
 	tekenVeld(&game);
-getch();}
+}while(getch()!='x');
 
 
 
@@ -64,7 +66,7 @@ getch();}
 // veld vrij geven
 	for(int x = 0; x <= game.maxX; x++)
 	{
-		for(int y = 0; y <= game.maxY; y++)
+		for(int y = 0; y <= game.maxY+2; y++)
 		{
 			free(game.veld[x][y]);
 		}
