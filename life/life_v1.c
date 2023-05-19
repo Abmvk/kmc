@@ -6,14 +6,14 @@
 #include <ncurses.h>
 #include "stdavk.h"
 
+#define MAX_X 45
+#define MAX_Y 140
 #define CELL_VELD 0
 #define COPIE_VELD 1
 
 struct GameOfLife
 {
-	bool ***veld;
-	int maxX;
-	int maxY;
+	bool veld[MAX_X][MAX_Y][2];
 };
 
 void cell_draw(int x, int y, bool aan);
@@ -23,28 +23,17 @@ void berekenNieuweGeneratie(struct GameOfLife *game);
 
 int main(int argc, char **argv)
 {
-	struct GameOfLife game;
-
-	getmaxyx(stdscr, game.maxX, game.maxY);
-
-// veld initialiseren
-	game.veld = malloc((game.maxX+1) * sizeof(bool **));
-	for(int x = 0; x <= game.maxX; x++)
-	{
-		game.veld[x] = malloc((game.maxY+1) * sizeof(bool *));
-		for(int y=0; y <= game.maxY; y++)
-		{
-			game.veld[x][y] = malloc(2 * sizeof(bool));
-			game.veld[x][y][CELL_VELD] = false;
-			game.veld[x][y][COPIE_VELD] = false;
-		}
-	}
-
-// scherm initialiseren
+	int x, y;
+// scherm en veld initialiseren
 	initscr();
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
+	struct GameOfLife game;
+	for (x=0; x<=MAX_X; x++)
+		for(y=0; y<=MAX_Y; y++)
+			game.veld[x][y][CELL_VELD] = false;
+// scherm klaar voor gebruik
 
 
 	maakVeld(&game);
@@ -61,24 +50,13 @@ getch();}
 	getch();
 	endwin();
 
-// veld vrij geven
-	for(int x = 0; x <= game.maxX; x++)
-	{
-		for(int y = 0; y <= game.maxY; y++)
-		{
-			free(game.veld[x][y]);
-		}
-		free(game.veld[x]);
-	}
-	free(game.veld);
-
 return 0;
 }
 
 
-void cell_set(const struct GameOfLife *game, int x, int y, bool aan)
+void cell_set(int x, int y, bool aan)
 {
-	if(x<0 || x>game->maxX || y<0 || y>game->maxY)
+	if(x<0 || x>MAX_X || y<0 || y>MAX_Y)
 		return;
 	if(aan)
 		mvaddch(x, y, ' ' | A_REVERSE);
@@ -88,27 +66,27 @@ void cell_set(const struct GameOfLife *game, int x, int y, bool aan)
 
 void tekenVeld(const struct GameOfLife *game)
 {
-	for(int x=0; x<=game->maxX; x++)
-		for(int y=0; y<=game->maxY; y++)
+	for(int x=0; x<=MAX_X; x++)
+		for(int y=0; y<=MAX_Y; y++)
 		{
 			bool cel = game->veld[x][y][CELL_VELD];
-			cell_set(game, x, y, cel);
+			cell_set(x, y, cel);
 		};
 	refresh();
 }
 
 void maakVeld(struct GameOfLife *game)
 {
-	int x=game->maxX / 2;
-	int y=game->maxY / 2;
+	int x=MAX_X/2;
+	int y=MAX_Y/2;
 	int ch;
 	bool stoppen = false;
 
 	while(!stoppen)
 	{
 		tekenVeld(game);
-		cell_set(game, x, y, !game->veld[x][y][CELL_VELD]);
-		cell_set(game, x, y, game->veld[x][y][CELL_VELD]);
+		cell_set(x, y, !game->veld[x][y][CELL_VELD]);
+		cell_set(x, y, game->veld[x][y][CELL_VELD]);
 		ch = getch();
 
 		switch(ch)
@@ -117,13 +95,13 @@ void maakVeld(struct GameOfLife *game)
 				if(x>0) x--;
 				break;
 			case 'a':
-				if(x<game->maxX) x++;
+				if(x<MAX_X) x++;
 				break;
 			case 'o':
 				if(y>0) y--;
 				break;
 			case 'p':
-				if(y<game->maxY) y++;
+				if(y<MAX_Y) y++;
 				break;
 			case ' ':
 				game->veld[x][y][CELL_VELD] = !game->veld[x][y][CELL_VELD];
@@ -140,8 +118,8 @@ void maakVeld(struct GameOfLife *game)
 void berekenNieuweGeneratie(struct GameOfLife *game)
 {
 	int x=0, y=0, buren, i, j, xb, yb;
-	for (x=0; x<=game->maxX; x++)
-		for(y=0; y<=game->maxY; y++)
+	for (x=0; x<=MAX_X; x++)
+		for(y=0; y<=MAX_Y; y++)
 			{
 				buren = 0;
 				for(i=x-1; i<=x+1; i++)
@@ -149,8 +127,8 @@ void berekenNieuweGeneratie(struct GameOfLife *game)
 					{
 						if(i == x && j == y)
 							continue;
-						xb = (i < 0) ? game->maxX : (i > game->maxX) ? 0 : i;
-						yb = (j < 0) ? game->maxY : (j > game->maxY) ? 0 : j;
+						xb = (i < 0) ? MAX_X : (i > MAX_X) ? 0 : i;
+						yb = (j < 0) ? MAX_Y : (j > MAX_Y) ? 0 : j;
 						if(game->veld[xb][yb][CELL_VELD]) buren++;
 					}
 				if(game->veld[x][y][CELL_VELD] && buren == 2)
@@ -160,7 +138,7 @@ void berekenNieuweGeneratie(struct GameOfLife *game)
 				if(buren == 3)
 					game->veld[x][y][COPIE_VELD] = true;
 			}
-	for(x=0; x<=game->maxX; x++)
-		for(y=0; y<=game->maxY; y++)
+	for(x=0; x<=MAX_X; x++)
+		for(y=0; y<=MAX_Y; y++)
 			game->veld[x][y][CELL_VELD] = game->veld[x][y][COPIE_VELD];
 }

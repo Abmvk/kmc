@@ -4,10 +4,12 @@
 
 int main(int argc, char **argv)
 {
+	int x, y;
 	initscr();
 	cbreak();
 	noecho();
-	printw("Hallo, wereld");
+	getmaxyx(stdscr, x, y);
+	printw("x=%d\ny=%d", x, y);
 	refresh();
 	getch();
 	endwin();
