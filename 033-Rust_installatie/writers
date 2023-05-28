@@ -1,0 +1,17 @@
+#!/bin/bash
+
+template_file="/home/pi/bin/template.rs"
+new_file="$1"
+
+if [ -z "$new_file" ]; then
+  echo "Geef een naam op voor het nieuwe bestand."
+  exit 1
+fi
+
+if [ -f "$new_file" ]; then
+  nano -ilY rust "$new_file"
+else
+  cp "$template_file" "$new_file"
+  nano -ilY rust "$new_file"
+fi
+
