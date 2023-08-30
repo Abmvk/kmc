@@ -34,3 +34,4 @@
 034 Variabelen en constanten
 035 Typisch, heel typisch hoor
 036 Compound types
+037 Functies
