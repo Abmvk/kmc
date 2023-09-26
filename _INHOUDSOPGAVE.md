@@ -36,3 +36,6 @@
 036 Compound types
 037 Functies
 038 Go with the flow
+039 Ownership
+040 Vim
+
