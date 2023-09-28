@@ -38,4 +38,6 @@
 038 Go with the flow
 039 Ownership
 040 Vim
+041 Bacon
+042 Ownership en strings
 
