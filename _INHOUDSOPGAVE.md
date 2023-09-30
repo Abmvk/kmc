@@ -40,4 +40,6 @@
 040 Vim
 041 Bacon
 042 Ownership en strings
-
+043 Borrowing en strings
+044 Borrowing en mutability
+045 Strings en slices
