@@ -43,3 +43,6 @@
 043 Borrowing en strings
 044 Borrowing en mutability
 045 Strings en slices
+046 Structuur met methodes
+
+
