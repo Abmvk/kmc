@@ -44,5 +44,5 @@
 044 Borrowing en mutability
 045 Strings en slices
 046 Structuur met methodes
-
-
+047 YouCompleteMe
+048 Enums, pattern matching en Options
