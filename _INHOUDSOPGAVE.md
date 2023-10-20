@@ -46,3 +46,5 @@
 046 Structuur met methodes
 047 YouCompleteMe
 048 Enums, pattern matching en Options
+049 Fout, heel fout en paniek
+
