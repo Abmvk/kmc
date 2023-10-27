@@ -49,3 +49,5 @@
 049 Fout, heel fout en paniek
 050 Hashmaps
 051 Functies en types
+052 Worstelen met traits
+
