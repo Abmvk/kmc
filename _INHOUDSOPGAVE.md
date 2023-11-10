@@ -53,4 +53,5 @@
 053 Traits opnieuw
 054 Lifetimes
 055 Simpel testwerk
+056 Data analyse in Rust
 
