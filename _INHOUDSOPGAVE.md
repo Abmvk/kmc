@@ -54,4 +54,4 @@
 054 Lifetimes
 055 Simpel testwerk
 056 Data analyse in Rust
-
+057 Closures
