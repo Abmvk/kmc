@@ -58,4 +58,5 @@
 058 Iterators
 059 Nerdy stuff
 060 Pointers, Stack en Heap
+061 Pointers in soorten en maten
 
