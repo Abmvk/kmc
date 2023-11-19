@@ -56,4 +56,6 @@
 056 Data analyse in Rust
 057 Closures
 058 Iterators
+059 Nerdy stuff
+060 Pointers, Stack en Heap
 
