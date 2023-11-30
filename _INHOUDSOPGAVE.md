@@ -59,4 +59,5 @@
 059 Nerdy stuff
 060 Pointers, Stack en Heap
 061 Pointers in soorten en maten
+062 Opnieuw data-analyse
 
