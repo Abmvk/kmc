@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall
-LIBS = -ljson-c -lncurses
+LIBS = -lncurses
 
 .PHONY: clean
 
