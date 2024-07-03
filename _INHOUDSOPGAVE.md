@@ -63,4 +63,12 @@
 063 Opnieuw data-analyse 2
 064 Web app
 065 Web server
+066 Een nostalgisch intermezzo
+067 Woekeren met ruimte
+068 Toen computers nog deden wat je dacht
+069 Wat alle accountants zouden moeten weten over computers
+070 Wat is het verschil tussen een computer en een mens?
+071 Wat is het verschil tussen een computer en een wasmachine?
+072 Wat is het verschil tussen een computer en pen en papier?
+073 Schout bij nacht Grace Hopper
 
