@@ -70,5 +70,6 @@
 070 Wat is het verschil tussen een computer en een mens?
 071 Wat is het verschil tussen een computer en een wasmachine?
 072 Wat is het verschil tussen een computer en pen en papier?
-073 Schout bij nacht Grace Hopper
+073 Commandeur Grace Hopper
+074 AI? Hou op! COBOL!!
 
