@@ -72,4 +72,5 @@
 072 Wat is het verschil tussen een computer en pen en papier?
 073 Commandeur Grace Hopper
 074 AI? Hou op! COBOL!!
+099 Helloe World in asm
 
