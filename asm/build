@@ -1,0 +1,30 @@
+#!/bin/bash
+if [ $# -lt 1 ]; then
+	echo "Usage: build <input_file>"
+	exit 1
+fi
+
+INPUT=$1
+EXT="${INPUT##*.}"
+
+if [ "$EXT" != "s" ] && [ "$EXT" != "asm" ]; then
+	echo "Error: Use .s or .asm"
+	exit 1
+fi
+
+BASENAME=$(basename "$INPUT" .$EXT)
+OUTPUT="${BASENAME}.o"
+EXECUTABLE="${BASENAME}"
+
+as -o "$OUTPUT" "$INPUT" && \
+ld -o "$EXECUTABLE" "$OUTPUT" && \
+chmod +x "$EXECUTABLE"
+
+if [ $? -eq 0 ]; then
+	rm "$OUTPUT"
+	echo "Build complete: $EXECUTABLE (object file removed)"
+else
+	echo "Build failed"
+	exit 1
+fi
+

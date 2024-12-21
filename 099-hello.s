@@ -1,6 +1,8 @@
 .global 	_start
+# commentaar
 
-.section 	.data
+
+.section 	.data				// commentaar
 	message: .asciz "Hello, World!\n"
 
 .section 	.text
