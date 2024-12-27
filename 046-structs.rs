@@ -79,3 +79,10 @@ fn nieuwe_kat(naam: String, woning: u32) -> Bewoner {
         soort: Soort::Kat,
     }
 }
+
+fn test() {
+    aa
+        bb
+        cc
+}
+
