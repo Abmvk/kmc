@@ -6,8 +6,8 @@ buffer: .space 21                           // 21 bytes voor de ASCII buffer
 
 _start:
     // 1. initialiseer operanden
-    mov x3, 1234                              // Operand 1 (x3)
-    mov x4, 2345                              // Operand 2 (x4)
+    mov x3, 0xFFFFFFFFFFFFFFFF                              // Operand 1 (x3)
+    mov x4, 0x0000000000000010                              // Operand 2 (x4)
 
     // 2. Bereken de som
     add x5, x3, x4                          // x5 = x3 + x4 (Resultaat)
