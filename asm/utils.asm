@@ -1,57 +1,11 @@
 .section .data
-buffer: .space 81                           // 65 bytes voor de ASCII buffer 64 bits getal, plus spaties, plus afsluiter \n of spatie
-newline: .ascii "\n"
+
+buffer: .space 81                           // 81 bytes voor de ASCII buffer 64 bits getal, plus spaties, plus afsluiter \n of spatie
 
 .section .text
-.global _start
 
-_start:
-    // 1. initialiseer operanden
-//  mov x3, 10                              // gebruik dit voor decimale waarden tot 65.535
+.global to_ascii                            // label moet extern bekend zijn om aan te roepen, dus .global
 
-    movz x3, 0xFFFF, lsl 0                  // Operand 1, laagste word (x3)
-    movk x3, 0xEEEE, lsl 16                 // volgende word
-    movk x3, 0xDDDD, lsl 32                 // derde word
-    movk x3, 0xCCCC, lsl 48                 // linker word
-
-    mov x4, 0                               // Operand 2 (x4)
-
-//  movz x4, 0x0000, lsl 0                  // gebruik voor 64 bits waarde, rechter word
-//  movk x4, 0x1111, lsl 16                 // volgende word
-//  movk x4, 0x2222, lsl 32                 // derde word
-//  movk x4, 0x3333, lsl 48                 // linker word
-
-    // 2. Bereken de som
-    add x5, x3, x4                          // x5 = x3 + x4 (Resultaat)
-
-    // 3. Kies afsluitend teken
-    mov w9, '\n'                            // newline als afluitend teken, kan ook spatie zijn, of komma, of punt
-
-    //4. Roep de ASCII-print subroutine viermaal aan
-    mov x7, 10                              // Talstelsel decimaal
-    bl to_ascii                             // Roep printroutine aan
-
-    mov x7, 16                              // hexadecimaal
-    bl to_ascii                             // Roep printroutine aan
-
-    mov x7, 8                               // octaal
-    bl to_ascii                             // roep printroutine aan
-
-    mov x7, 2                               // binair
-    bl to_ascii                             // roep printroutine aan
-
-    // 6. Sluit programma af
-    mov x0, 1                               // Afsluiten met een newline voor nette output, naar stdout
-    ldr x1, =newline                        // pointer naar de newline string
-    mov x2, 1                               // newline is 1 byte
-    mov x8, 64                              // Syscall write
-    svc 0                                   // Syscall
-
-    mov x0, 0                               // Exitcode (0= succesvol)
-    mov x8, 93                              // Syscall exit
-    svc 0                                   // Syscall
-
-    // Subroutine voor ASCII-conversie
 to_ascii:
     // veilig stellen x5 op de stack
     sub sp, sp, 16                          // maak ruimte op de stack voor 1 register, 16 bytes = 2 x 64 bits = eenheid ARM stack
@@ -78,10 +32,10 @@ store_digit:
     add x2, x2, 1                           // Verhoog stringlengte
     add w10, w10, 1                         // Verhoog teller voor aantal geschreven karakters
 
-    mov w11, 4                              // voor decimaal groeperen per 3
+    mov w11, 4                              // voor niet-decimaal groeperen per 4
     cmp x7, 10                              // controleer of het decimaal is
-    b.ne group_digits                       // Gebruik groepen van 4 voor andere talstelsels
-    mov w11, 3                              // Voor niet-decimaal groep van 4
+    b.ne group_digits                       // Gebruik groepen van 3 voor andere decimaal
+    mov w11, 3                              // Voor decimaal groep van 3
 
 group_digits:
     udiv w12, w10, w11                      // Bereken of groep is voltooid
@@ -89,11 +43,10 @@ group_digits:
     cbnz w12, skip_space                    // Als niet gelijk aan 0, dan geen spatie
 
     udiv x12, x5, x7
-    cbz x12, skip_space                         // Controleer of je al aan het begin zit
-//    b.eq skip_space
+    cbz x12, skip_space                     // Controleer of je al aan het begin zit, dan ook geen spatie
 
     sub x1, x1, 1                           // Verplaats bufferpointer naar links
-    mov w6, ' '                             // Xet spatie in register
+    mov w6, ' '                             // Zet spatie in register
     strb w6, [x1]                           // Sla spatie op in buffer
     add x2, x2, 1                           // Verhoog stringlengte
 
