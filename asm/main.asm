@@ -8,14 +8,14 @@ newline: .ascii "\n"
 
 _start:
     // 1. initialiseer operanden
-//  mov x3, 10                              // gebruik dit voor decimale waarden tot 65.535
+    mov x3, 20                              // gebruik dit voor decimale waarden tot 65.535
 
-    movz x3, 0xFFFF, lsl 0                  // Operand 1, laagste word (x3)
-    movk x3, 0xEEEE, lsl 16                 // volgende word
-    movk x3, 0xDDDD, lsl 32                 // derde word
-    movk x3, 0xCCCC, lsl 48                 // linker word
+//    movz x3, 0xFFFF, lsl 0                  // Operand 1, laagste word (x3)
+//    movk x3, 0xEEEE, lsl 16                 // volgende word
+//    movk x3, 0xDDDD, lsl 32                 // derde word
+//    movk x3, 0xCCCC, lsl 48                 // linker word
 
-    mov x4, 6000                            // Operand 2 (x4)
+    mov x4, 10                              // Operand 2 (x4)
 
 //  movz x4, 0x0000, lsl 0                  // gebruik voor 64 bits waarde, rechter word
 //  movk x4, 0x1111, lsl 16                 // volgende word
