@@ -1,0 +1,13 @@
+# Rust build artifacts
+rust/target/
+**/target/
+
+# C/C++ build artifacts
+*.o
+*.out
+a.out
+
+# Editor files
+*~
+*.swp
+.*.swp
